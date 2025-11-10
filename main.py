@@ -32,7 +32,7 @@ s3 = boto3.client(
 )
 
 # Initialize MongoDB
-# ✅ Use certifi to trust MongoDB’s SSL certificates
+# Use certifi to trust MongoDB’s SSL certificates
 client = MongoClient(MONGO_URI, tlsCAFile=certifi.where())
 db = client[MONGO_DB_NAME]
 assets_collection = db["assets"]
@@ -46,19 +46,19 @@ def home():
     return {"message": "3D Editor Backend + MongoDB connected 🚀"}
 
 
-# ✅ Upload GLB file and save metadata
+#  Upload GLB file and save metadata
 @app.post("/upload/")
 async def upload_file(file: UploadFile = File(...)):
     try:
-        # ✅ Check file type
+        # Check file type
         if not file.filename.endswith(".glb"):
             raise HTTPException(status_code=400, detail="Only .glb files are allowed")
 
-        # ✅ Generate unique file key
+        #Generate unique file key
         file_id = str(uuid4())
         file_key = f"assets/{file_id}_{file.filename}"
 
-        # ✅ Upload to S3
+        # Upload to S3
         s3.upload_fileobj(
             file.file,
             S3_BUCKET,
@@ -66,10 +66,10 @@ async def upload_file(file: UploadFile = File(...)):
             ExtraArgs={"ContentType": "model/gltf-binary"}
         )
 
-        # ✅ Construct public URL
+        # Construct public URL
         file_url = f"https://{S3_BUCKET}.s3.{AWS_REGION}.amazonaws.com/{file_key}"
 
-        # ✅ Prepare metadata
+        #Prepare metadata
         metadata = {
             "file_id": file_id,
             "file_name": file.filename,
@@ -80,16 +80,16 @@ async def upload_file(file: UploadFile = File(...)):
             "uploaded_by": "Ananya"
         }
 
-        # ✅ Insert into MongoDB
+        # Insert into MongoDB
         result = assets_collection.insert_one(metadata)
 
-        # ✅ Convert ObjectId to string
+        # Convert ObjectId to string
         metadata["_id"] = str(result.inserted_id)
 
-        # ✅ Convert datetime to ISO string (JSON-safe)
+        # Convert datetime to ISO string (JSON-safe)
         metadata["uploaded_at"] = metadata["uploaded_at"].isoformat()
 
-        # ✅ Return clean JSON response
+        # Return clean JSON response
         return JSONResponse(
             status_code=200,
             content={
@@ -101,7 +101,7 @@ async def upload_file(file: UploadFile = File(...)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-# ✅ List all assets from MongoDB
+#  List all assets from MongoDB
 @app.get("/assets/")
 def list_assets():
     try:
@@ -111,7 +111,7 @@ def list_assets():
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# ✅ Get a specific asset's details by ID
+# Get a specific asset's details by ID
 @app.get("/assets/{file_id}")
 def get_asset(file_id: str):
     asset = assets_collection.find_one({"file_id": file_id}, {"_id": 0})
@@ -120,7 +120,7 @@ def get_asset(file_id: str):
     return asset
 
 
-# ✅ Delete an asset (S3 + Mongo)
+# Delete an asset (S3 + Mongo)
 @app.delete("/assets/{file_id}")
 def delete_asset(file_id: str):
     asset = assets_collection.find_one({"file_id": file_id})
