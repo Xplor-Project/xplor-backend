@@ -1,13 +1,117 @@
-.env 
-/pycache__/
-*.pyc
-instance/
-*.sqlite3
-.DS_Store
-.vscode/
-migrations/
-*.log
-*.pot
-venv/
+# ===========================
+# PYTHON / FASTAPI PROJECT
+# ===========================
+
+# Byte-compiled / optimized / DLL files
 __pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+.venv/
+.venv*/
+pip-wheel-metadata/
+.venv.bak/
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Logs and debug
+*.log
+*.out
+*.err
+logs/
+debug.log
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.pytest_cache/
+pytestdebug.log
+
+# FastAPI or Uvicorn auto reload cache
+uvicorn.log
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Local settings
+local_settings.py
+
+# ===========================
+# ENVIRONMENT CONFIG
+# ===========================
+
+# Environment variables (AWS keys, Mongo URIs, etc.)
+.env
+.env.*
+!.env.example
+
+# ===========================
+# BUILD / DISTRIBUTION FILES
+# ===========================
+
+build/
+dist/
 *.egg-info/
+*.egg
+MANIFEST
+
+# ===========================
+# PROJECT SPECIFIC (3D Editor)
+# ===========================
+
+# Uploaded assets (if temporarily stored locally)
+uploads/
+tmp/
+media/
+
+# Any cache folders for models or assets
+__model_cache__/
+.cache/
+data/
+assets/
+staticfiles/
+
+# ===========================
+# IDE / EDITOR CONFIG
+# ===========================
+
+# VS Code
+.vscode/
+.history/
+.code-workspace
+
+# PyCharm / IntelliJ
+.idea/
+*.iml
+
+# ===========================
+# OS SPECIFIC
+# ===========================
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+
+# Linux
+*~
