@@ -5,7 +5,8 @@ import logging
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    force=True
 )
 logger = logging.getLogger(__name__)
 
@@ -42,5 +43,7 @@ except Exception as e:
 @app.get("/")
 def home():
     return {"message": "3D Editor FastAPI Backend 🚀"}
+
+logger.info("Application startup complete. Ready to serve requests.")
 
 # Run: uvicorn backend.main:app --reload
