@@ -1,6 +1,13 @@
 from fastapi import FastAPI
-from routes import assets, health
 from fastapi.middleware.cors import CORSMiddleware # Import CORSMiddleware
+import logging
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title="3D Editor Asset Manager",
@@ -17,9 +24,20 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-# Include Routers
-app.include_router(assets.router)
-app.include_router(health.router)
+# Include Routers with Error Handling
+try:
+    from routes import assets
+    app.include_router(assets.router)
+    logger.info("Assets router included successfully.")
+except Exception as e:
+    logger.error(f"Failed to include assets router: {e}")
+
+try:
+    from routes import health
+    app.include_router(health.router)
+    logger.info("Health router included successfully.")
+except Exception as e:
+    logger.error(f"Failed to include health router: {e}")
 
 @app.get("/")
 def home():

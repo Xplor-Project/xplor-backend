@@ -1,5 +1,5 @@
 # backend/models/asset_model.py
-from pydantic import BaseModel, HttpUrl, Field
+from pydantic import BaseModel, HttpUrl, Field, ConfigDict
 from typing import Optional, List
 from datetime import datetime
 
@@ -16,11 +16,7 @@ class AssetBase(BaseModel):
     uploaded_at: datetime = Field(default_factory=datetime.utcnow, description="Upload timestamp")
     tags: List[str] = Field(default_factory=list, description="Tags for search/filtering")
 
-    class Config:
-        orm_mode = True
-        json_encoders = {
-            datetime: lambda dt: dt.isoformat(),
-        }
+    model_config = ConfigDict(from_attributes=True)
 
 
 class AssetCreate(BaseModel):
