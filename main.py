@@ -16,6 +16,14 @@ app = FastAPI(
     description="FastAPI backend for managing 3D assets and previews stored in AWS S3 + MongoDB",
 )
 
+from starlette.middleware.sessions import SessionMiddleware
+from core.config import settings
+
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=settings.SECRET_KEY
+)
+
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
@@ -39,6 +47,7 @@ try:
     logger.info("Health router included successfully.")
 except Exception as e:
     logger.error(f"Failed to include health router: {e}")
+app.include_router(auth.router)
 
 @app.get("/")
 def home():

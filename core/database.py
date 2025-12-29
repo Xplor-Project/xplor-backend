@@ -21,3 +21,5 @@ except Exception as e:
     db = None
     assets_collection = None
 
+users_collection = db["users"]
+
