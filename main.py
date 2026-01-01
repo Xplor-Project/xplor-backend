@@ -18,11 +18,23 @@ app = FastAPI(
 
 from starlette.middleware.sessions import SessionMiddleware
 from core.config import settings
+from fastapi.exceptions import RequestValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
+from utils.exception_handlers import (
+    global_exception_handler, 
+    http_exception_handler, 
+    validation_exception_handler
+)
 
 app.add_middleware(
     SessionMiddleware,
     secret_key=settings.SECRET_KEY
 )
+
+# Exception Handlers
+app.add_exception_handler(Exception, global_exception_handler)
+app.add_exception_handler(StarletteHTTPException, http_exception_handler)
+app.add_exception_handler(RequestValidationError, validation_exception_handler)
 
 # Configure CORS
 app.add_middleware(
