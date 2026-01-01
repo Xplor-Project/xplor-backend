@@ -42,12 +42,32 @@ except Exception as e:
     logger.error(f"Failed to include assets router: {e}")
 
 try:
+
     from routes import health
+
     app.include_router(health.router)
+
     logger.info("Health router included successfully.")
+
 except Exception as e:
+
     logger.error(f"Failed to include health router: {e}")
-app.include_router(auth.router)
+
+
+
+try:
+
+    from routes import auth
+
+    app.include_router(auth.router)
+
+    logger.info("Auth router included successfully.")
+
+except Exception as e:
+
+    logger.error(f"Failed to include auth router: {e}")
+
+
 
 @app.get("/")
 def home():

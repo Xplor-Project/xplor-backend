@@ -12,14 +12,18 @@ try:
     client = MongoClient(settings.MONGO_URI, tlsCAFile=certifi.where())
     db = client[settings.MONGO_DB_NAME]
     assets_collection = db["assets"]
+    users_collection = db["users"]
     logger.info("Successfully connected to MongoDB.")
 except Exception as e:
     logger.error(f"Failed to connect to MongoDB: {e}")
-    # Initialize as None or a dummy to prevent import errors, 
-    # though usage will still fail if not handled in routes.
+    # Initialize as None to prevent import errors
     client = None
     db = None
     assets_collection = None
+    users_collection = None
 
-users_collection = db["users"]
+def check_db_connection():
+    from fastapi import HTTPException
+    if db is None:
+        raise HTTPException(status_code=503, detail="Database Unavailable")
 

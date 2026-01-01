@@ -43,3 +43,32 @@ async def send_verification_email(email_to: str, otp: str):
         await fm.send_message(message)
     except Exception as e:
         print(f"Failed to send email: {e}")
+
+async def send_reset_password_email(email_to: str, otp: str):
+    """
+    Sends a password reset email with OTP using fastapi-mail (Async).
+    If SMTP settings are not configured properly, it prints the OTP to the console.
+    """
+    
+    subject = "Password Reset Request for Xplor"
+    body = f"Your password reset code is: {otp}\n\nIf you did not request this, please ignore this email."
+    
+    # Check if SMTP settings are present
+    if not settings.SMTP_USERNAME or not settings.SMTP_PASSWORD:
+        print(f"\n[MOCK EMAIL] To: {email_to}")
+        print(f"[MOCK EMAIL] Subject: {subject}")
+        print(f"[MOCK EMAIL] Body: {body}\n")
+        return
+
+    message = MessageSchema(
+        subject=subject,
+        recipients=[email_to],
+        body=body,
+        subtype=MessageType.plain
+    )
+
+    fm = FastMail(conf)
+    try:
+        await fm.send_message(message)
+    except Exception as e:
+        print(f"Failed to send email: {e}")
